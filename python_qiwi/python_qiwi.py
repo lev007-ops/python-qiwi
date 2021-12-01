@@ -12,7 +12,7 @@ class QiwiWаllet():
         self.s.headers['authorization'] = 'Bearer ' + api_token
         self.phone = phone
 
-    def pay(self, to_qw, sum_p2p, comment=''):
+    def pay(self, to_qw, sum_p2p, comment='', currency=643):
         sum_p2p = str(int(sum_p2p)) + '.00'
         self.s.headers = {
             'content-type': 'application/json',
@@ -21,9 +21,9 @@ class QiwiWаllet():
         }
 
         postjson = {"id": str(int(time.time() * 1000)), "sum": {
-            "amount": '2.00', "currency": "643"
+            "amount": sum_p2p, "currency": str(currency)
         }, "paymentMethod": {
-            "type": "Account", "accountId": "643"
+            "type": "Account", "accountId": str(currency)
         }, "comment": str(comment), "fields": {"account": to_qw}}
         res = self.s.post(
             'https://edge.qiwi.com/sinap/api/v2/terms/99/payments',
@@ -31,17 +31,18 @@ class QiwiWаllet():
         return res.json()
 
     def payment_history(self, rows_num=5):
-        parameters = {'rows': str(rows_num), 'nextTxnId': '', 'nextTxnDate': ''}
+        parameters = {'rows': str(
+            rows_num), 'nextTxnId': '', 'nextTxnDate': ''}
         h = self.s.get('https://edge.qiwi.com/payment-history/v2/persons/' +
                        self.phone + '/payments', params=parameters)
         return h.json()
 
     def bill(self):
         letters = string.ascii_lowercase
-        return ''.join(random.choice(letters) for i in range(7))
+        return ''.join(random.choice(letters) for i in range(12))
 
     def check(self, comment):
-        lastPayments = self.payment_history(20)
+        lastPayments = self.payment_history(40)
         for payment in lastPayments:
             qcomment = payment['comment']
             if comment in qcomment:
@@ -74,3 +75,11 @@ class QiwiWаllet():
         p = self.s.get(
             'https://edge.qiwi.com/person-profile/v1/profile/current?authInfoEnabled=true&contractInfoEnabled=true&userInfoEnabled=true')
         return p.json()
+
+    def get_payment(self, comment):
+        lastPayments = self.payment_history(30)
+        for payment in lastPayments:
+            qcomment = payment['comment']
+            if comment in qcomment:
+                return payment
+        return False
