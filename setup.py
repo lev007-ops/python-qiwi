@@ -7,7 +7,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setup(
     name="python-qiwi",
-    version="0.0.3",
+    version="1.0.0",
     author="Lev",
     author_email="lev_bariakh@icloud.com",
     description="library for easy work with qiwi wallet",

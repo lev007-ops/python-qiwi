@@ -5,7 +5,7 @@ import random
 import string
 
 
-class QiwiWwаllet():
+class QiwiWаllet():
 
     def __init__(self, phone, api_token):
         self.s = requests.Session()
