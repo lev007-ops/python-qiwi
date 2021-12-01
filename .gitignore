@@ -2,3 +2,6 @@ __pycache__/
 t.py
 /venv
 README.md
+/python_qiwi.egg-info
+/dist
+/build
