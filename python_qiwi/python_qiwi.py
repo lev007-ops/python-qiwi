@@ -32,7 +32,7 @@ class QiwiWаllet():
             json: information about the success of the translation
         """
 
-        sum_p2p = str(int(sum_p2p)) + '.00'
+        sum_p2p = f'{sum_p2p}.00'
         self.s.headers = {
             'content-type': 'application/json',
             'User-Agent': 'Android v3.2.0 MKT',
@@ -61,8 +61,7 @@ class QiwiWаllet():
 
         parameters = {'rows': str(
             rows_num), 'nextTxnId': '', 'nextTxnDate': ''}
-        h = self.s.get('https://edge.qiwi.com/payment-history/v2/persons/' +
-                       self.phone + '/payments', params=parameters)
+        h = self.s.get(f'https://edge.qiwi.com/payment-history/v2/persons/{self.phone}/payments', params=parameters)
         return h.json()
 
     def bill(self):
@@ -96,8 +95,7 @@ class QiwiWаllet():
         self.s.headers['Accept'] = 'application/json'
 
         b = self.s.get(
-            'https://edge.qiwi.com/funding-sources/v2/persons/' + self.phone +
-            '/accounts')
+            'https://edge.qiwi.com/funding-sources/v2/persons/{self.phone}/accounts')
         return b.json()
 
     def balance(self):
@@ -109,7 +107,7 @@ class QiwiWаllet():
         self.s.headers['Accept'] = 'application/json'
 
         b = self.s.get(
-            'https://edge.qiwi.com/funding-sources/v2/persons/' + self.phone + '/accounts')
+            'https://edge.qiwi.com/funding-sources/v2/persons/{self.phone}/accounts')
         b = b.json()
         b = b['accounts'][0]['balance']['amount']
 
