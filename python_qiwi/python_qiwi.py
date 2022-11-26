@@ -4,6 +4,7 @@ import time
 import random
 import string
 
+__CURRENCY = 643
 
 class QiwiWаllet():
 
@@ -19,7 +20,7 @@ class QiwiWаllet():
         self.s.headers['authorization'] = 'Bearer ' + api_token
         self.phone = phone
 
-    def pay(self, to_qw: str, sum_p2p: int, comment='', currency=643):
+    def pay(self, to_qw: str, sum_p2p: int, comment=''):
         """pay
 
         Args:
@@ -40,9 +41,9 @@ class QiwiWаllet():
         }
 
         postjson = {"id": str(int(time.time() * 1000)), "sum": {
-            "amount": sum_p2p, "currency": str(currency)
+            "amount": sum_p2p, "currency": __CURRENCY
         }, "paymentMethod": {
-            "type": "Account", "accountId": str(currency)
+            "type": "Account", "accountId": __CURRENCY
         }, "comment": str(comment), "fields": {"account": to_qw}}
         res = self.s.post(
             'https://edge.qiwi.com/sinap/api/v2/terms/99/payments',
